@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<script>
+(function(){
+  var root = document.documentElement;
+  function getStored(){ try { return localStorage.getItem('theme'); } catch(e){ return null; } }
+  function system(){ return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+  function effective(){ return root.getAttribute('data-theme') || system(); }
+  // 无闪烁：在 CSS 应用于首屏前预设主题
+  var s = getStored();
+  if (s === 'dark' || s === 'light') root.setAttribute('data-theme', s);
+  function update(){
+    var eff = effective();
+    var stored = getStored();
+    var label = (stored === 'auto' || !stored)
+      ? '🌗 系统(' + (eff === 'dark' ? '深' : '浅') + ')'
+      : (eff === 'dark' ? '🌙 深色' : '☀ 浅色');
+    document.querySelectorAll('[data-theme-toggle]').forEach(function(b){
+      b.textContent = label;
+      b.setAttribute('aria-label', '切换主题');
+    });
+  }
+  function cycle(){
+    var stored = getStored();
+    var next = (stored === 'auto' || !stored) ? 'light' : (stored === 'light' ? 'dark' : 'auto');
+    try { localStorage.setItem('theme', next); } catch(e){}
+    if (next === 'auto') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', next);
+    update();
+  }
+  function build(){
+    document.querySelectorAll('.nav').forEach(function(nav){
+      var wrap = nav.querySelector('.nav-links') || nav;
+      if (wrap.querySelector('[data-theme-toggle]')) return;
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'theme-toggle';
+      btn.setAttribute('data-theme-toggle', '');
+      btn.addEventListener('click', cycle);
+      wrap.appendChild(btn);
+    });
+    update();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build);
+  else build();
+})();
+</script>
+
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="关于「风与墨」这个名字，关于这个站点，关于写字这件事。" />
+  <meta name="author" content="风与墨" />
+  <title>关于 · 风与墨</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23f8f6f2' rx='20'/><text x='50' y='68' font-family='serif' font-size='52' fill='%237a8a7a' text-anchor='middle' font-weight='500'>墨</text></svg>" />
+</head>
+<body>
+  <div class="container">
+
+    <nav class="nav">
+      <a href="index.html" class="blog-name">
+        <span class="feng">风</span><span class="yu">与</span><span class="mo">墨</span>
+      </a>
+      <div class="nav-links">
+        <a href="about.html">关于</a>
+        <a href="posts/echo/index.html">来信</a>
+      </div>
+    </nav>
+
+    <header class="page-header">
+      <p class="breadcrumb"><a href="index.html">风与墨</a> <span class="sep">/</span> 关于</p>
+      <h1 class="page-title">关于这个名字</h1>
+    </header>
+
+    <article class="post-content">
+
+      <section class="content-section">
+        <p class="lede">风，是无意间路过的见闻。读书、观影、所思所感，皆可为风。</p>
+        <p class="lede">墨，是有意间落定的记录。一笔一划，把路过的风写下来。</p>
+      </section>
+
+      <section class="content-section">
+        <h2>这里会写什么</h2>
+        <p>主板块叫「笔记」，下设四个栏目，四种风力：</p>
+        <ul class="cat-list">
+          <li>
+            <span class="cat-name">听风</span>
+            <span class="cat-meta">阅读笔记</span>
+            <span class="cat-desc">风中有书声。读书笔记、书评、摘抄与延伸思考。</span>
+          </li>
+          <li>
+            <span class="cat-name">晓风</span>
+            <span class="cat-meta">思考感悟</span>
+            <span class="cat-desc">"晓"为破晓、晨明。头脑清醒时，存放下人生感悟、价值观梳理、阶段复盘。</span>
+          </li>
+          <li>
+            <span class="cat-name">吟风</span>
+            <span class="cat-meta">诗歌 / 散文</span>
+            <span class="cat-desc">把情绪和风景，揉进行或散句里。偏文学性的原创文字。</span>
+          </li>
+          <li>
+            <span class="cat-name">回风</span>
+            <span class="cat-meta">互动 / 读者来信</span>
+            <span class="cat-desc">风出去，有回响。留言回复、读者投稿、话题回应。</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="content-section">
+        <h2>为何写得这么笨</h2>
+        <p>AI 能写出工整的句子，但写不出走过一条街时的那种停顿；</p>
+        <p>能整理出一份读书清单，但列不出凌晨读到某一段时身体的反应。</p>
+        <p>所以本站的内容，文字尽量人写、尽量慢写、尽量笨写。语法不必工整，结构不必漂亮——只要是真的走过那段日子。</p>
+        <p>但也不拒绝工具。排版会请教工程师，配色会问问设计师。它们是磨墨的砚，不是代笔的手。</p>
+      </section>
+
+      <section class="content-section">
+        <h2>关于作者</h2>
+        <p>不必认识。</p>
+        <p>只是一个个想把脑子里的东西落到纸上的人。写字不是为了被看见，是为了不掉进遗忘里。</p>
+        <p>如果你正好路过，欢迎留下你的风。</p>
+      </section>
+
+    </article>
+
+    <div class="footer">
+      <p class="closing">
+        <span class="feng">风</span>是见闻，<span class="mo">墨</span>是记录。<br>
+        吹到哪里，就写到哪里。
+      </p>
+      <p class="links">
+        <a href="index.html">首页</a> ·
+        <a href="posts/echo/index.html">来信</a>
+      </p>
+      <p class="copy">© 2026 风与墨 · 用墨的方式，慢慢写</p>
+    </div>
+
+  </div>
+</body>
+</html>
